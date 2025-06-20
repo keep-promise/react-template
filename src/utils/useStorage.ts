@@ -1,12 +1,7 @@
 import { useEffect, useState } from 'react';
-import { isSSR } from '@/utils/is';
 
 const getDefaultStorage = (key) => {
-  if (!isSSR) {
-    return localStorage.getItem(key);
-  } else {
-    return undefined;
-  }
+  return localStorage.getItem(key);
 };
 
 type TFun = (v: string) => void;
@@ -17,18 +12,14 @@ function useStorage(key: string, defaultValue?: string): TResult {
   const [storedValue, setStoredValue] = useState(getDefaultStorage(key) || defaultValue);
 
   const setStorageValue = (value: string) => {
-    if (!isSSR) {
-      localStorage.setItem(key, value);
-      if (value !== storedValue) {
-        setStoredValue(value);
-      }
+    localStorage.setItem(key, value);
+    if (value !== storedValue) {
+      setStoredValue(value);
     }
   };
 
   const removeStorage = () => {
-    if (!isSSR) {
-      localStorage.removeItem(key);
-    }
+    localStorage.removeItem(key);
   };
 
   useEffect(() => {
